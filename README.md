@@ -1,7 +1,7 @@
 # HyperAppReact-Back
 
 ## Descripción
-HyperAppReact-Back es la parte backend del proyecto **HyperAppReact**, desarrollado por **Karlo Antonio Gómez** y **Hugo Aguirre**. Este repositorio contiene la configuración y el código necesario para soportar la funcionalidad del backend utilizando TypeScript y Laravel 11.
+HyperAppReact-Back es la parte backend del proyecto **HyperAppReact**, desarrollado por **Karlo Antonio Gómez** y **Hugo Aguirre**. Este repositorio contiene la configuración y el código necesario para soportar la funcionalidad del backend utilizando servidor vite para el front-end y Laravel 11(PHP) como backend.
 
 ## Tecnologías utilizadas
 - **TypeScript**
