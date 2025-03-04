@@ -114,6 +114,11 @@ Para ejecutar el backend en Laravel 11, sigue estos pasos:
    npm run dev
    ```
 
+### Nota sobre la carga de datos en la tabla `clientes`
+Actualmente, debido a un problema con el **CSRF Token**, la tabla `clientes` debe llenarse manualmente desde la terminal o mediante herramientas como MySQL Workbench. 
+
+El problema de **CSRF (Cross-Site Request Forgery)** impide que se realicen peticiones para agregar, actualizar o eliminar datos a través de la API. Para solucionar esto, se está trabajando en la implementación de **Sanctum**, una herramienta de Laravel que permite la autenticación basada en tokens y protege las solicitudes contra ataques de CSRF. Se espera que, una vez integrado correctamente, sea posible manipular los datos de la base de datos directamente desde la API.
+
 ## Contribución
 Si deseas contribuir al desarrollo de **HyperAppReact-Back**, por favor sigue estos pasos:
 1. Haz un fork del repositorio.
