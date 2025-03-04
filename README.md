@@ -127,7 +127,9 @@ Si deseas contribuir al desarrollo de **HyperAppReact-Back**, por favor sigue es
 4. Envía un pull request para revisión.
 
 ## Licencia
-Este proyecto está bajo la licencia **MIT**.
+Este proyecto es de desarrollo privado y no está autorizado para su distribución, copia o modificación sin permiso expreso de los desarrolladores.  
+Este software es propiedad de sus desarrolladores originales y no está disponible para distribución pública ni uso sin autorización previa. Todos los derechos reservados.
+Este proyecto está bajo la licencia **Privada**.
 
 ---
 
