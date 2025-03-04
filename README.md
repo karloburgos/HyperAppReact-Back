@@ -45,7 +45,7 @@ Para ejecutar este backend localmente, sigue estos pasos:
 
 1. Clona el repositorio:
    ```sh
-   git clone https://github.com/tu-usuario/HyperAppReact-Back.git
+   git clone https://github.com/karloburgos/HyperAppReact-Back.git
    cd HyperAppReact-Back
    ```
 
