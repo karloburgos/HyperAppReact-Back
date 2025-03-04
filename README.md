@@ -10,7 +10,7 @@ HyperAppReact-Back es la parte backend del proyecto **HyperAppReact**, desarroll
 - **ESNext** (para modularidad y compatibilidad con ES2022+)
 - **Laravel 11**
 - **PHP 8.2**
-- **MySQL o SQLite**
+- **MySQL 8.0 o SQLite**
 
 ## Configuración de TypeScript
 Este proyecto usa la siguiente configuración en `tsconfig.node.json`:
@@ -78,7 +78,16 @@ Para ejecutar el backend en Laravel 11, sigue estos pasos:
    ```sh
    cp .env.example .env
    ```
-   Luego edita el archivo `.env` y configura la conexión a la base de datos.
+   Luego edita el archivo `.env` y configura la conexión a la base de datos. Se recomienda la siguiente configuración para MySQL 8.0:
+
+   ```sh
+   DB_CONNECTION=mysql
+   # DB_HOST=127.0.0.1
+   # DB_PORT=3306
+   # DB_DATABASE=apphyperreact
+   # DB_USERNAME=root
+   # DB_PASSWORD=
+   ```
 
 4. Genera la clave de la aplicación:
    ```sh
