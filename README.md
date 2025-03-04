@@ -41,7 +41,7 @@ Este proyecto usa la siguiente configuración en `tsconfig.node.json`:
 ```
 
 ## Instalación (TypeScript Front-end)
-Para ejecutar este backend localmente, sigue estos pasos:
+Para ejecutar este front-end localmente, sigue estos pasos:
 
 1. Clona el repositorio:
    ```sh
