@@ -50,50 +50,52 @@ export interface Client {
   image?: string;
 }
 
-export const initialClients: Client[] = [{
-  id: 1,
-  firstName: 'María',
-  lastName: 'García',
-  countryCode: '+52',
-  phone: '555 123 4567',
-  socialNetworks: [
-    { type: 'facebook', username: 'maria.garcia' },
-    { type: 'instagram', username: '@maria.g' }
-  ],
-  email: 'maria.garcia@email.com',
-  birthDate: '1990-05-15',
-  origin: 'Recomendación',
-  relatedClient: 'Ana López',
-  country: 'mx',
-  totalSpent: 4500,
-  totalVisits: 12,
-  reviews: 4,
-  status: 'active',
-  membershipType: 'VIP',
-  image: '',
-},
-{
-  id: 2,
-  firstName: 'Carlos',
-  lastName: 'Rodríguez',
-  countryCode: '+52',
-  phone: '555 987 6543',
-  socialNetworks: [
-    { type: 'instagram', username: '@carlos.rdz' },
-  ],
-  email: 'carlos.rodriguez@email.com',
-  birthDate: '1988-08-20',
-  origin: 'Redes Sociales',
-  relatedClient: 'María García',
-  country: 'mx',
-  totalSpent: 3200,
-  totalVisits: 8,
-  reviews: 3,
-  status: 'active',
-  membershipType: 'Premium',
-  image: '',
-}
-];
+export const initialClients: Client[]=[];
+
+// export const initialClients: Client[] = [{
+//   id: 1,
+//   firstName: 'María',
+//   lastName: 'García',
+//   countryCode: '+52',
+//   phone: '555 123 4567',
+//   socialNetworks: [
+//     { type: 'facebook', username: 'maria.garcia' },
+//     { type: 'instagram', username: '@maria.g' }
+//   ],
+//   email: 'maria.garcia@email.com',
+//   birthDate: '1990-05-15',
+//   origin: 'Recomendación',
+//   relatedClient: 'Ana López',
+//   country: 'mx',
+//   totalSpent: 4500,
+//   totalVisits: 12,
+//   reviews: 4,
+//   status: 'active',
+//   membershipType: 'VIP',
+//   image: '',
+// },
+// {
+//   id: 2,
+//   firstName: 'Carlos',
+//   lastName: 'Rodríguez',
+//   countryCode: '+52',
+//   phone: '555 987 6543',
+//   socialNetworks: [
+//     { type: 'instagram', username: '@carlos.rdz' },
+//   ],
+//   email: 'carlos.rodriguez@email.com',
+//   birthDate: '1988-08-20',
+//   origin: 'Redes Sociales',
+//   relatedClient: 'María García',
+//   country: 'mx',
+//   totalSpent: 3200,
+//   totalVisits: 8,
+//   reviews: 3,
+//   status: 'active',
+//   membershipType: 'Premium',
+//   image: '',
+// }
+// ];
 
 const membershipColors = {
   VIP: 'bg-purple-500/10 text-purple-500',
@@ -109,9 +111,14 @@ export function ClientsPage() {
   const [selectedClients, setSelectedClients] = useState<number[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
 
+  //Se hace la Consulta a la api para consultar todos los clientes desde un principio
   useEffect(() => {
-    obtenerClientes().then(setClients);
-  }, []);
+    obtenerClientes().then(clients => {
+        setClients(clients);
+        console.log(clients);
+    });
+}, []);
+
 
   const handleSelectAll = (checked: boolean) => {
     setSelectedClients(checked ? filteredClients.map(client => client.id) : []);
@@ -152,18 +159,14 @@ export function ClientsPage() {
       image: clientData.avatar,
     };
 
-    const response = await fetch('/../api/clients', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newClient),
-    });
-  
-    if (response.ok) {
-      const createdClient = await response.json();
-      setClients(prev => [...prev, createdClient]);
-    } else {
-      console.error('Error adding client');
-    }
+    //Llamado a la api para crear nuevo cliente
+    try {
+      const response = await crearCliente(newClient);
+
+      setClients(prev => [...prev, response]);
+      } catch (error) {
+          console.error('Error adding client:', error);
+      }
   };
 
   const filteredClients = clients.filter(client => {
@@ -172,7 +175,6 @@ export function ClientsPage() {
                          client.phone.includes(searchTerm);
                          
     if (!matchesSearch) return false;
-    
     switch (activeTab) {
       case 'todos':
         return client.status === 'active';
@@ -268,97 +270,98 @@ export function ClientsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={selectedClients.includes(client.id)}
-                        className="checkbox"
-                        onCheckedChange={(checked) => handleSelectClient(client.id, checked as boolean)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Avatar>
-                        <AvatarImage src={client.image} />
-                        <AvatarFallback>
-                          {client.firstName[0]}{client.lastName[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <p className="font-medium">{client.firstName} {client.lastName}</p>
-                        <Badge className={`badge ${membershipColors[client.membershipType]}`}>
-                          {client.membershipType.charAt(0).toUpperCase() + client.membershipType.slice(1)}
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-muted-foreground" />
-                          <span>{client.countryCode} {client.phone}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-muted-foreground" />
-                          <span>{client.email}</span>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell">
-                      <div className="flex gap-1">
-                        {client.socialNetworks.map((network, index) => {
-                          const Icon = socialIcons[network.type as keyof typeof socialIcons];
-                          return Icon ? (
-                            <Button key={index} variant="ghost" size="icon" className="h-8 w-8">
-                              <Icon className="h-4 w-4" />
-                            </Button>
-                          ) : null;
-                        })}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell">
-                      <div className="space-y-1">
-                        <Badge variant="outline" className="badge">{client.origin}</Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-left">
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-start gap-2">
-                          <DollarSign className="h-4 w-4 text-muted-foreground" />
-                          <span>${client.totalSpent.toLocaleString()}</span>
-                        </div>
-                        <div className="flex items-center justify-start gap-2">
-                          <Users className="h-4 w-4 text-muted-foreground" />
-                          <span>{client.totalVisits} visitas</span>
-                        </div>
-                        <div className="flex items-center justify-start gap-2">
-                          <Star className="h-4 w-4 text-muted-foreground" />
-                          <span>{client.reviews} reseñas</span>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-center">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Ver perfil</DropdownMenuItem>
-                            <DropdownMenuItem>Enviar mensaje</DropdownMenuItem>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                              Eliminar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {filteredClients && filteredClients.map((client) => (
+  <TableRow key={client.id}>
+    <TableCell>
+      <Checkbox
+        checked={selectedClients.includes(client.id)}
+        className="checkbox"
+        onCheckedChange={(checked) => handleSelectClient(client.id, checked as boolean)}
+      />
+    </TableCell>
+    <TableCell>
+      <Avatar>
+        <AvatarImage src={client.image} />
+        <AvatarFallback>
+          {client.firstName[0]}{client.lastName[0]}
+        </AvatarFallback>
+      </Avatar>
+    </TableCell>
+    <TableCell>
+      <div className="space-y-1">
+        <p className="font-medium">{client.firstName} {client.lastName}</p>
+        <Badge className={`badge ${membershipColors[client.membershipType]}`}>
+          {client.membershipType.charAt(0).toUpperCase() + client.membershipType.slice(1)}
+        </Badge>
+      </div>
+    </TableCell>
+    <TableCell>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <Phone className="h-4 w-4 text-muted-foreground" />
+          <span>{client.countryCode} {client.phone}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Mail className="h-4 w-4 text-muted-foreground" />
+          <span>{client.email}</span>
+        </div>
+      </div>
+    </TableCell>
+    <TableCell className="hidden lg:table-cell">
+      <div className="flex gap-1">
+        {client.socialNetworks && client.socialNetworks.map((network, index) => {
+          const Icon = socialIcons[network.type as keyof typeof socialIcons];
+          return Icon ? (
+            <Button key={index} variant="ghost" size="icon" className="h-8 w-8">
+              <Icon className="h-4 w-4" />
+            </Button>
+          ) : null;
+        })}
+      </div>
+    </TableCell>
+    <TableCell className="hidden lg:table-cell">
+      <div className="space-y-1">
+        <Badge variant="outline" className="badge">{client.origin}</Badge>
+      </div>
+    </TableCell>
+    <TableCell className="text-left">
+      <div className="space-y-1">
+        <div className="flex items-center justify-start gap-2">
+          <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <span>${client.totalSpent ? client.totalSpent.toLocaleString() : "N/A"}</span>
+        </div>
+        <div className="flex items-center justify-start gap-2">
+          <Users className="h-4 w-4 text-muted-foreground" />
+          <span>{client.totalVisits ? client.totalVisits.toLocaleString() : "N/A"} visitas</span>
+        </div>
+        <div className="flex items-center justify-start gap-2">
+          <Star className="h-4 w-4 text-muted-foreground" />
+          <span>{client.reviews ? client.reviews.toLocaleString() : "N/A"} reseñas</span>
+        </div>
+      </div>
+    </TableCell>
+    <TableCell>
+      <div className="flex justify-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Ver perfil</DropdownMenuItem>
+            <DropdownMenuItem>Enviar mensaje</DropdownMenuItem>
+            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Eliminar
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </TableCell>
+  </TableRow>
+            ))}
+
               </TableBody>
             </Table>
           </ScrollArea>

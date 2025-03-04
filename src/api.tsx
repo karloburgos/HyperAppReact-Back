@@ -7,9 +7,14 @@ export async function obtenerClientes() {
 
 export async function crearCliente(cliente: any) {
   const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cliente),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cliente),
   });
+
+  if (!res.ok) {
+      throw new Error('Failed to create client');
+  }
+
   return res.json();
 }
