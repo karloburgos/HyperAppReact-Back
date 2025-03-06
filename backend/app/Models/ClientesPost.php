@@ -10,6 +10,8 @@ class ClientesPost extends Model
     /** @use HasFactory<\Database\Factories\ClientesPostFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
             'firstName',
             'lastName',

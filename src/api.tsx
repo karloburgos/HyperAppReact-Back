@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/clientes";
+const API_URL = "http://127.0.0.1:8000/api/clientes";
 
 export async function obtenerClientes() {
   const res = await fetch(API_URL);

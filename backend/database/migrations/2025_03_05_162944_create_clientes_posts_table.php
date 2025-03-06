@@ -16,7 +16,7 @@ return new class extends Migration
         $table->string('firstName');
         $table->string('lastName');
         $table->string('email')->unique();
-        $table->string('phone');
+        $table->string('phone')->nullable();
         $table->string('countryCode')->default('+52');
         $table->text('socialNetworks')->nullable();
         $table->date('birthDate')->nullable();

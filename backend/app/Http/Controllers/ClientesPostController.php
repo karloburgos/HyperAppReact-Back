@@ -29,26 +29,47 @@ class ClientesPostController extends Controller
             'email' => 'required'
         ]);
 
-        $post = ClientesPost::create($fields);
-        return ['post' => $post];
+        $cliente = ClientesPost::create($fields);
+        return $cliente;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ClientesPost $clientesPost)
-    {
-        //Busqueda especifica por Id
-        return ['post' => $clientesPost];
-    }
+
+     public function show(ClientesPost $cliente)
+     {
+         return response()->json(['cliente' => $cliente]);
+     }
+     
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, ClientesPost $clientesPost)
     {
-        //
+        // Validar los datos enviados
+        $fields = $request->validate([
+            'firstName' => 'required|max:60',
+            'lastName' => 'required|max:60',
+            'phone' => 'required',
+            'email' => 'required|email'
+        ]);
+    
+        // Actualizar el cliente
+        $clientesPost->update($fields);
+    
+        return response()->json([
+            'message' => 'Cliente actualizado exitosamente',
+            'cliente' => $clientesPost->fresh() // Refresca los datos del modelo
+        ]);
     }
+    
+
+    
+
+    
+
 
     /**
      * Remove the specified resource from storage.
